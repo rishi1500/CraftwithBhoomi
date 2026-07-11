@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Craft with Bhoomi — Handmade Memories, Crafted With Love</title>
+<meta name="description" content="Personalized handcrafted gifts — custom photo stands, wooden frames, name plaques, keychains & more. PAN India delivery.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* ── VIBGYOR palette ── */
+  --cherry:   #D0002E;
+  --red:      #E8334A;
+  --orange:   #F26522;
+  --amber:    #F5A623;
+  --yellow:   #F9D423;
+  --lime:     #8BC34A;
+  --green:    #2ECC71;
+  --teal:     #1ABC9C;
+  --cyan:     #0EA5E9;
+  --blue:     #3B5EE8;
+  --indigo:   #5C3BC8;
+  --violet:   #9B27AF;
+  --pink:     #E91E8C;
+  --magenta:  #FF4FA3;
+
+  /* ── neutrals ── */
+  --white:    #FFFFFF;
+  --snow:     #FFF8FC;
+  --softgray: #F3F0F8;
+  --dark:     #1A1025;
+  --dark2:    #2D1B3D;
+  --mid:      #4A3860;
+  --muted:    #7A6890;
+
+  /* ── brand gradient ── */
+  --grad1: linear-gradient(135deg, #D0002E 0%, #F26522 30%, #F9D423 55%, #2ECC71 75%, #3B5EE8 90%, #9B27AF 100%);
+  --grad2: linear-gradient(135deg, #9B27AF 0%, #3B5EE8 35%, #1ABC9C 60%, #F9D423 85%, #E8334A 100%);
+  --grad-cherry: linear-gradient(135deg, #D0002E, #F26522);
+  --grad-violet: linear-gradient(135deg, #5C3BC8, #9B27AF);
+  --grad-ocean:  linear-gradient(135deg, #0EA5E9, #1ABC9C);
+  --grad-sunny:  linear-gradient(135deg, #F9D423, #F26522);
+  --grad-rose:   linear-gradient(135deg, #E91E8C, #D0002E);
+
+  --ease: cubic-bezier(0.25,0.46,0.45,0.94);
+  --shadow: 0 8px 40px rgba(90,30,120,0.18);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Poppins', sans-serif; background: var(--snow); color: var(--dark); overflow-x: hidden; }
+
+/* ════ LOADER ════ */
+#loader {
+  position: fixed; inset: 0; z-index: 10000;
+  background: var(--dark);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 1.6rem;
+  overflow: hidden;
+}
+#loader::before {
+  content: '';
+  position: absolute; inset: -50%;
+  background: conic-gradient(from 0deg, #D0002E22, #F2652222, #F9D42322, #2ECC7122, #3B5EE822, #9B27AF22, #D0002E22);
+  animation: loaderSpin 6s linear infinite;
+}
+@keyframes loaderSpin { to { transform: rotate(360deg); } }
+#loader-logo-wrap { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 0.8rem; }
+#loader-logo-img {
+  width: 88px; height: 88px; border-radius: 22px;
+  background: linear-gradient(135deg, #9B27AF33, #3B5EE833);
+  border: 2px solid rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.6rem;
+  opacity: 0; transform: scale(0.6) rotate(-15deg);
+  animation: ldrPop 0.8s 0.3s var(--ease) forwards;
+  box-shadow: 0 0 40px rgba(155,39,175,0.4), 0 0 80px rgba(59,94,232,0.2);
+}
+#loader-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  background: var(--grad1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  letter-spacing: 0.04em; font-weight: 700;
+  opacity: 0; transform: translateY(20px);
+  animation: ldrUp 0.7s 0.65s var(--ease) forwards;
+}
+#loader-tag {
+  font-size: 0.72rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  opacity: 0; animation: ldrUp 0.7s 0.9s var(--ease) forwards;
+}
+#loader-bar-wrap { width: 200px; height: 3px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; position: relative; z-index:1; }
+#loader-bar { height: 100%; background: var(--grad1); background-size: 200%; width: 0; animation: ldrBar 1.8s 0.5s ease forwards; }
+@keyframes ldrPop { to { opacity:1; transform:scale(1) rotate(0deg); } }
+@keyframes ldrUp  { to { opacity:1; transform:translateY(0); } }
+@keyframes ldrBar { to { width:100%; } }
+
+/* ════ STARS CANVAS ════ */
+#stars-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
+
+/* ════ NAVBAR ════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+  padding: 1rem 5vw;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: background 0.4s, box-shadow 0.4s, padding 0.35s;
+}
+nav.scrolled {
+  background: rgba(255,248,252,0.96);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 2px 30px rgba(155,39,175,0.12);
+  padding: 0.7rem 5vw;
+}
+.nav-brand { display: flex; align-items: center; gap: 0.9rem; text-decoration: none; }
+.nav-logo-img {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: linear-gradient(135deg, rgba(155,39,175,0.2), rgba(59,94,232,0.2));
+  border: 2px solid rgba(155,39,175,0.35);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.7rem; flex-shrink: 0; overflow: hidden;
+  transition: border-color 0.4s, box-shadow 0.4s;
+}
+.nav-logo-img:hover { box-shadow: 0 0 20px rgba(155,39,175,0.4); }
+.nav-logo-img img { width:100%; height:100%; object-fit:cover; border-radius:12px; }
+nav.scrolled .nav-logo-img { border-color: rgba(155,39,175,0.5); }
+.nav-logo-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.45rem; font-weight: 700;
+  line-height: 1.1; letter-spacing: 0.02em;
+  background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.8) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  transition: all 0.4s;
+}
+nav.scrolled .nav-logo-text {
+  background: var(--grad-violet);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.nav-logo-sub { display: block; font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; font-family: 'Poppins', sans-serif; font-weight: 500; opacity: 0.65; }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+  font-size: 0.78rem; font-weight: 500; letter-spacing: 0.09em;
+  text-transform: uppercase; color: rgba(255,255,255,0.82);
+  text-decoration: none; position: relative; transition: color 0.3s;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 2px;
+  background: var(--grad1); border-radius: 2px;
+  transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease);
+}
+.nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+nav.scrolled .nav-links a { color: var(--mid); }
+.nav-links a:hover { color: var(--violet); }
+.nav-toggle { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:4px; }
+.nav-toggle span { display:block; width:25px; height:2px; background:white; border-radius:2px; transition: background 0.4s, transform 0.3s, opacity 0.3s; }
+nav.scrolled .nav-toggle span { background: var(--dark); }
+.nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Mobile menu */
+.mobile-menu {
+  display: none; position: fixed; inset: 0;
+  background: var(--dark2); z-index: 800;
+  flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem;
+  opacity: 0; transition: opacity 0.3s;
+}
+.mobile-menu.open { opacity: 1; }
+.mobile-menu a {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 6vw, 2.6rem);
+  text-decoration: none; letter-spacing: 0.04em;
+  background: var(--grad1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  transition: opacity 0.3s;
+}
+.mobile-menu a:hover { opacity: 0.75; }
+.mob-close { position: absolute; top: 1.5rem; right: 5vw; background: none; border: none; color: white; font-size: 1.8rem; cursor: pointer; }
+
+/* ════ REVEALS ════ */
+.reveal   { opacity:0; transform:translateY(36px); transition:opacity 0.85s var(--ease), transform 0.85s var(--ease); }
+.reveal-l { opacity:0; transform:translateX(-44px); transition:opacity 0.85s var(--ease), transform 0.85s var(--ease); }
+.reveal-r { opacity:0; transform:translateX(44px);  transition:opacity 0.85s var(--ease), transform 0.85s var(--ease); }
+.reveal.visible, .reveal-l.visible, .reveal-r.visible { opacity:1; transform:none; }
+
+/* ════ SHARED ════ */
+.eyebrow { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; display: block; margin-bottom: 0.6rem; font-weight: 600; }
+.section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.9rem,4vw,3.2rem); line-height: 1.14; color: var(--dark); margin-bottom: 1rem; }
+.section-sub { font-size: 0.97rem; line-height: 1.85; color: var(--muted); }
+.section-pad { padding: 6rem 5vw; }
+.section-center { text-align:center; max-width:580px; margin:0 auto 3.5rem; }
+.section-center .section-sub { margin: 0 auto; }
+
+/* ════ BUTTONS ════ */
+.btn-primary {
+  background: var(--grad-cherry); color: white;
+  padding: 0.88rem 2.2rem; border-radius: 60px;
+  font-weight: 600; font-size: 0.9rem; letter-spacing: 0.04em;
+  text-decoration: none; border: none; cursor: pointer;
+  display: inline-block; position: relative; overflow: hidden;
+  transition: transform 0.3s var(--ease), box-shadow 0.3s;
+  box-shadow: 0 6px 24px rgba(208,0,46,0.35);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(208,0,46,0.45); }
+.btn-outline {
+  background: transparent; color: white;
+  padding: 0.88rem 2.2rem; border-radius: 60px;
+  font-weight: 500; font-size: 0.9rem;
+  border: 2px solid rgba(255,255,255,0.4);
+  text-decoration: none; display: inline-block;
+  transition: border-color 0.3s, background 0.3s, color 0.3s;
+}
+.btn-outline:hover { border-color: white; background: rgba(255,255,255,0.12); }
+
+/* ════ HERO ════ */
+#hero {
+  min-height: 100svh;
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: center; gap: 3rem;
+  padding: 7rem 5vw 4rem;
+  position: relative; overflow: hidden;
+  background: var(--dark);
+}
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse at 20% 60%, rgba(155,39,175,0.28) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 20%, rgba(59,94,232,0.22) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 80%, rgba(208,0,46,0.18) 0%, transparent 45%);
+}
+.hero-content { position: relative; z-index: 2; }
+.hero-eyebrow {
+  display: inline-block;
+  background: var(--grad1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  font-size: 0.72rem; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 600;
+  margin-bottom: 1.2rem;
+  opacity: 0; transform: translateY(18px);
+  animation: fadeUp 0.7s 2.1s var(--ease) forwards;
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.6rem, 5.5vw, 5rem);
+  line-height: 1.09; color: white;
+  margin-bottom: 1.3rem;
+  opacity: 0; transform: translateY(28px);
+  animation: fadeUp 0.9s 2.35s var(--ease) forwards;
+}
+.hero-title .grad-word {
+  background: var(--grad1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  font-style: italic;
+}
+.hero-para {
+  font-size: 1.02rem; line-height: 1.85; color: rgba(255,255,255,0.62);
+  max-width: 430px; margin-bottom: 2.2rem;
+  opacity: 0; transform: translateY(18px);
+  animation: fadeUp 0.7s 2.65s var(--ease) forwards;
+}
+.hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; transform: translateY(18px); animation: fadeUp 0.7s 2.88s var(--ease) forwards; }
+@keyframes fadeUp { to { opacity:1; transform:none; } }
+
+.hero-visual { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 1.4rem; }
+.hero-img-wrap {
+  width: 100%; max-width: 420px; aspect-ratio: 4/5;
+  border-radius: 26px; overflow: hidden;
+  box-shadow: 0 0 0 2px rgba(155,39,175,0.4), 0 36px 72px rgba(0,0,0,0.5);
+  opacity: 0; transform: scale(0.9) translateY(28px);
+  animation: heroImg 1.1s 2.3s var(--ease) forwards;
+}
+@keyframes heroImg { to { opacity:1; transform:none; } }
+.hero-img-inner {
+  width: 100%; height: 100%;
+  background: linear-gradient(145deg, #2D1B3D 0%, #4B1D6A 50%, #1A1025 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem;
+  color: rgba(255,255,255,0.22); font-size: 0.75rem; letter-spacing: 0.14em;
+}
+.hero-img-inner img { width:100%; height:100%; object-fit:cover; display:block; }
+.hero-cards { display: flex; flex-direction: column; gap: 0.65rem; width: 100%; max-width: 420px; opacity: 0; transform: translateY(18px); animation: fadeUp 0.7s 3.1s var(--ease) forwards; }
+.hero-card {
+  background: rgba(255,255,255,0.07); backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.12); border-radius: 14px;
+  padding: 0.7rem 1.1rem; font-size: 0.83rem;
+  color: rgba(255,255,255,0.85); display: flex; align-items: center; gap: 0.65rem;
+  transition: background 0.3s, border-color 0.3s;
+}
+.hero-card:hover { background: rgba(155,39,175,0.15); border-color: rgba(155,39,175,0.4); }
+
+/* ════ ABOUT ════ */
+#about { background: var(--snow); }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; max-width: 1150px; margin: 0 auto; }
+.about-img-wrap {
+  aspect-ratio: 3/4; border-radius: 28px; overflow: hidden;
+  background: linear-gradient(145deg, #f8e8ff 0%, #e0d0ff 50%, #c8d8ff 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 0.8rem; color: rgba(90,30,120,0.45); font-size: 0.75rem; letter-spacing: 0.14em;
+  box-shadow: 0 28px 72px rgba(155,39,175,0.18); position: relative;
+}
+.about-img-wrap img { width:100%; height:100%; object-fit:cover; display:block; position:absolute; inset:0; }
+.about-text { display: flex; flex-direction: column; gap: 1.3rem; }
+.about-text p { font-size: 0.97rem; line-height: 1.92; color: var(--muted); }
+.about-text p strong { font-weight: 600; }
+.about-text p strong.cherry { color: var(--cherry); }
+.about-text p strong.violet { color: var(--violet); }
+.about-text p strong.teal   { color: var(--teal); }
+.about-stats { display: flex; gap: 2rem; padding-top: 0.5rem; flex-wrap: wrap; }
+.stat-box { text-align: center; }
+.stat-box-num {
+  font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; line-height: 1;
+  background: var(--grad-cherry); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.stat-box-label { font-size: 0.78rem; color: var(--muted); margin-top: 0.2rem; }
+
+/* ════ CATEGORIES ════ */
+#categories { background: var(--softgray); }
+.cat-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.3rem; max-width: 1260px; margin: 0 auto; }
+.cat-card {
+  border-radius: 22px; overflow: hidden; background: white;
+  box-shadow: 0 6px 30px rgba(90,30,120,0.1);
+  transition: transform 0.4s var(--ease), box-shadow 0.4s;
+}
+.cat-card:hover { transform: translateY(-8px) scale(1.015); box-shadow: 0 22px 54px rgba(90,30,120,0.22); }
+.cat-thumb {
+  width: 100%; aspect-ratio: 1; overflow: hidden; position: relative;
+  display: flex; align-items: center; justify-content: center; font-size: 2.8rem;
+  transition: transform 0.5s var(--ease);
+}
+.cat-thumb img { width:100%; height:100%; object-fit:cover; display:block; position:absolute; inset:0; }
+.cat-card:hover .cat-thumb { transform: scale(1.08); }
+.cat-overlay { position:absolute; inset:0; opacity:0; transition:opacity 0.4s; display:flex; align-items:flex-end; padding:1rem; }
+.cat-card:hover .cat-overlay { opacity:1; }
+.cat-body { padding: 1.1rem 1.3rem; }
+.cat-title { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--dark); margin-bottom: 0.28rem; }
+.cat-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.65; }
+
+/* category thumb colors */
+.ct1 { background: linear-gradient(145deg,#ffe0e8,#ffb3c8); }
+.ct2 { background: linear-gradient(145deg,#fff0cc,#ffd966); }
+.ct3 { background: linear-gradient(145deg,#e0f4ff,#a3d9ff); }
+.ct4 { background: linear-gradient(145deg,#f0ffe0,#b8f0a0); }
+.ct5 { background: linear-gradient(145deg,#ffe8f5,#ffb3d9); }
+.ct6 { background: linear-gradient(145deg,#e8e0ff,#c8b0ff); }
+.ct7 { background: linear-gradient(145deg,#e0fff8,#a0f0d8); }
+.ct8 { background: linear-gradient(145deg,#fff4e0,#ffd0a0); }
+/* overlay colors per card */
+.ov1 { background: linear-gradient(to top, rgba(208,0,46,0.7), transparent); }
+.ov2 { background: linear-gradient(to top, rgba(242,101,34,0.7), transparent); }
+.ov3 { background: linear-gradient(to top, rgba(14,165,233,0.7), transparent); }
+.ov4 { background: linear-gradient(to top, rgba(46,204,113,0.7), transparent); }
+.ov5 { background: linear-gradient(to top, rgba(233,30,140,0.7), transparent); }
+.ov6 { background: linear-gradient(to top, rgba(92,59,200,0.7), transparent); }
+.ov7 { background: linear-gradient(to top, rgba(26,188,156,0.7), transparent); }
+.ov8 { background: linear-gradient(to top, rgba(245,166,35,0.7), transparent); }
+
+/* ════ WHY ════ */
+#why { background: var(--dark); }
+.why-intro .section-title { color: white; }
+.why-intro .section-sub   { color: rgba(255,255,255,0.5); }
+.why-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.3rem; max-width: 1150px; margin: 0 auto; }
+.why-card {
+  border-radius: 22px; padding: 2.2rem 1.8rem; text-align: center;
+  border: 1.5px solid rgba(255,255,255,0.08);
+  transition: transform 0.4s var(--ease), border-color 0.4s, box-shadow 0.4s;
+  position: relative; overflow: hidden;
+}
+.why-card::before { content:''; position:absolute; inset:0; opacity:0.07; transition:opacity 0.4s; }
+.why-card:nth-child(1)::before { background: var(--grad-cherry); }
+.why-card:nth-child(2)::before { background: var(--grad-sunny); }
+.why-card:nth-child(3)::before { background: var(--grad-ocean); }
+.why-card:nth-child(4)::before { background: var(--grad-rose); }
+.why-card:hover { transform: translateY(-7px); border-color: rgba(255,255,255,0.2); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+.why-card:hover::before { opacity: 0.18; }
+.why-icon {
+  width: 64px; height: 64px; margin: 0 auto 1.3rem; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 1.8rem;
+  transition: transform 0.4s var(--ease);
+}
+.why-card:hover .why-icon { transform: scale(1.15) rotate(6deg); }
+.wi1 { background: rgba(208,0,46,0.18); }
+.wi2 { background: rgba(245,166,35,0.18); }
+.wi3 { background: rgba(59,94,232,0.18); }
+.wi4 { background: rgba(233,30,140,0.18); }
+.why-card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: white; margin-bottom: 0.6rem; }
+.why-card p { font-size: 0.82rem; color: rgba(255,255,255,0.52); line-height: 1.76; }
+
+/* ════ PROCESS ════ */
+#process { background: var(--snow); }
+.process-row { display: flex; gap: 0; max-width: 1050px; margin: 0 auto; position: relative; align-items: flex-start; }
+.process-row::before {
+  content: ''; position: absolute; top: 40px; left: 10%; right: 10%; height: 2px;
+  background: var(--grad1); z-index: 0; border-radius: 2px;
+}
+.process-step { flex:1; display:flex; flex-direction:column; align-items:center; text-align:center; padding:0 1.2rem; position:relative; z-index:1; }
+.process-node {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: white; border: 3px solid transparent;
+  background-clip: padding-box;
+  display: flex; align-items: center; justify-content: center; font-size: 1.8rem;
+  box-shadow: 0 0 0 3px white, 0 8px 28px rgba(90,30,120,0.2);
+  margin-bottom: 1.4rem; position: relative;
+  transition: transform 0.4s var(--ease), box-shadow 0.4s;
+}
+.process-step:nth-child(1) .process-node { box-shadow: 0 0 0 3px white, 0 8px 28px rgba(208,0,46,0.3); }
+.process-step:nth-child(2) .process-node { box-shadow: 0 0 0 3px white, 0 8px 28px rgba(245,166,35,0.3); }
+.process-step:nth-child(3) .process-node { box-shadow: 0 0 0 3px white, 0 8px 28px rgba(59,94,232,0.3); }
+.process-step:nth-child(4) .process-node { box-shadow: 0 0 0 3px white, 0 8px 28px rgba(46,204,113,0.3); }
+.process-step:hover .process-node { transform: scale(1.1); }
+.process-num {
+  position: absolute; top: -8px; right: -8px;
+  width: 24px; height: 24px; border-radius: 50%;
+  font-size: 0.64rem; font-weight: 700; color: white;
+  display: flex; align-items: center; justify-content: center;
+}
+.pn1 { background: var(--cherry); }
+.pn2 { background: var(--amber); }
+.pn3 { background: var(--blue); }
+.pn4 { background: var(--green); }
+.process-step h3 { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--dark); margin-bottom: 0.45rem; }
+.process-step p { font-size: 0.8rem; color: var(--muted); line-height: 1.72; }
+
+/* ════ REVIEWS ════ */
+#reviews { background: var(--dark2); overflow: hidden; }
+.reviews-intro .section-title { color: white; }
+.reviews-intro .section-sub   { color: rgba(255,255,255,0.5); }
+.reviews-wrap { position:relative; overflow:hidden; }
+.reviews-wrap::before,
+.reviews-wrap::after { content:''; position:absolute; top:0; bottom:0; width:100px; z-index:2; }
+.reviews-wrap::before { left:0;  background:linear-gradient(90deg, var(--dark2), transparent); }
+.reviews-wrap::after  { right:0; background:linear-gradient(-90deg, var(--dark2), transparent); }
+.reviews-track { display:flex; gap:1.4rem; animation:scrollR 40s linear infinite; width:max-content; }
+.reviews-track:hover { animation-play-state:paused; }
+@keyframes scrollR { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.review-card {
+  border-radius: 22px; padding: 1.8rem 2.2rem; width: 340px; flex-shrink: 0;
+  border: 1.5px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04);
+  transition: border-color 0.3s, background 0.3s;
+}
+.review-card:hover { background: rgba(155,39,175,0.1); border-color: rgba(155,39,175,0.35); }
+.review-stars { font-size: 0.95rem; margin-bottom: 0.9rem; letter-spacing: 0.08em; }
+.review-text { font-size: 0.88rem; line-height: 1.82; color: rgba(255,255,255,0.7); margin-bottom: 1.4rem; font-style: italic; }
+.review-author { display:flex; align-items:center; gap:0.9rem; }
+.review-avatar { width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; overflow:hidden; }
+.review-avatar img { width:100%; height:100%; object-fit:cover; display:block; }
+.review-name { font-weight:600; color:white; font-size:0.88rem; }
+.review-loc  { font-size:0.73rem; color:rgba(255,255,255,0.45); }
+
+/* avatar gradient colors */
+.av1 { background: linear-gradient(135deg,#D0002E,#F26522); }
+.av2 { background: linear-gradient(135deg,#F9D423,#F26522); }
+.av3 { background: linear-gradient(135deg,#9B27AF,#E91E8C); }
+.av4 { background: linear-gradient(135deg,#3B5EE8,#0EA5E9); }
+.av5 { background: linear-gradient(135deg,#2ECC71,#1ABC9C); }
+.av6 { background: linear-gradient(135deg,#5C3BC8,#9B27AF); }
+.av7 { background: linear-gradient(135deg,#E91E8C,#D0002E); }
+.av8 { background: linear-gradient(135deg,#0EA5E9,#2ECC71); }
+
+/* ════ STATS ════ */
+#stats { background: white; }
+.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:2rem; max-width:960px; margin:0 auto; text-align:center; }
+.stat-num { font-family:'Playfair Display',serif; font-size:clamp(2.2rem,5vw,3.8rem); font-weight:700; line-height:1; }
+.stat-num.c1 { background:var(--grad-cherry); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.stat-num.c2 { background:var(--grad-sunny);  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.stat-num.c3 { background:var(--grad-ocean);  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.stat-num.c4 { background:var(--grad-violet); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.stat-label { font-size:0.8rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); font-weight:500; margin-top:0.4rem; }
+
+/* ════ BEFORE & AFTER ════ */
+#ba { background: var(--softgray); }
+.ba-wrap { max-width:680px; margin:0 auto; position:relative; border-radius:24px; overflow:hidden; aspect-ratio:16/9; box-shadow:0 24px 60px rgba(90,30,120,0.2); user-select:none; }
+.ba-before,.ba-after { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.8rem; font-size:0.8rem; letter-spacing:0.12em; font-weight:600; text-transform:uppercase; }
+.ba-before { background:linear-gradient(145deg,#f8e8ff,#e0d0ff); color:rgba(90,30,120,0.5); }
+.ba-before img, .ba-after img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.ba-after  { background:linear-gradient(145deg,#1A1025,#2D1B3D); color:rgba(255,255,255,0.4); clip-path:inset(0 50% 0 0); }
+.ba-divider { position:absolute; top:0; bottom:0; left:50%; width:3px; background:white; transform:translateX(-50%); cursor:ew-resize; z-index:10; }
+.ba-handle { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:44px; height:44px; border-radius:50%; background:white; display:flex; align-items:center; justify-content:center; font-size:1rem; box-shadow:0 4px 18px rgba(0,0,0,0.25); color:var(--dark); }
+.ba-lbl { position:absolute; bottom:0.9rem; font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; padding:0.3rem 0.8rem; border-radius:6px; font-weight:600; }
+.ba-lbl-b { left:1rem;  background:rgba(155,39,175,0.6); color:white; }
+.ba-lbl-a { right:1rem; background:rgba(208,0,46,0.75); color:white; }
+
+/* ════ FAQ ════ */
+#faq { background: var(--snow); }
+.faq-wrap { max-width:760px; margin:0 auto; }
+.faq-item { border-bottom: 1.5px solid rgba(90,30,120,0.1); overflow:hidden; }
+.faq-q { display:flex; justify-content:space-between; align-items:center; padding:1.4rem 0; cursor:pointer; font-family:'Playfair Display',serif; font-size:1rem; color:var(--dark); gap:1rem; transition:color 0.3s; }
+.faq-q:hover { color: var(--violet); }
+.faq-icon { width:28px; height:28px; flex-shrink:0; border-radius:50%; border:2px solid var(--violet); display:flex; align-items:center; justify-content:center; font-size:1rem; color:var(--violet); transition:transform 0.4s var(--ease), background 0.3s, color 0.3s; }
+.faq-item.open .faq-icon { transform:rotate(45deg); background:var(--grad-violet); border-color:transparent; color:white; }
+.faq-a { max-height:0; overflow:hidden; transition:max-height 0.5s var(--ease), padding 0.3s; font-size:0.88rem; color:var(--muted); line-height:1.82; }
+.faq-item.open .faq-a { max-height:200px; padding-bottom:1.4rem; }
+
+/* ════ CONTACT ════ */
+#contact { background: white; }
+.contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:4.5rem; max-width:1150px; margin:0 auto; align-items:start; }
+.contact-title { font-family:'Playfair Display',serif; font-size:1.7rem; color:var(--dark); margin-bottom:1.8rem; }
+.form-group { margin-bottom:1.3rem; }
+.form-group label { display:block; font-size:0.74rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:0.42rem; font-weight:500; }
+.form-group input, .form-group textarea {
+  width:100%; padding:0.85rem 1.1rem;
+  background:var(--softgray); border:1.5px solid rgba(90,30,120,0.12);
+  border-radius:12px; font-family:'Poppins',sans-serif; font-size:0.88rem; color:var(--dark);
+  transition:border-color 0.3s, box-shadow 0.3s; outline:none;
+}
+.form-group input:focus, .form-group textarea:focus { border-color:var(--violet); box-shadow:0 0 0 4px rgba(155,39,175,0.1); }
+.form-group textarea { min-height:110px; resize:vertical; }
+.contact-right { display:flex; flex-direction:column; gap:2rem; }
+.contact-right-title { font-family:'Playfair Display',serif; font-size:1.5rem; color:var(--dark); }
+.contact-right-sub { font-size:0.9rem; color:var(--muted); line-height:1.78; }
+.contact-details { display:flex; flex-direction:column; gap:1rem; }
+.contact-detail { display:flex; align-items:center; gap:0.9rem; }
+.contact-icon { width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; }
+.ci1 { background:rgba(208,0,46,0.1); }
+.ci2 { background:rgba(37,211,102,0.12); }
+.ci3 { background:rgba(155,39,175,0.1); }
+.ci4 { background:rgba(59,94,232,0.1); }
+.cdl { font-size:0.72rem; color:var(--muted); }
+.cdv { font-size:0.88rem; color:var(--dark); font-weight:500; }
+
+/* ════ FOOTER ════ */
+footer { background: var(--dark); padding: 4.5rem 5vw 2rem; }
+.footer-top { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:2.5rem; margin-bottom:3.5rem; }
+.footer-brand-name {
+  font-family:'Playfair Display',serif; font-size:1.6rem;
+  background: var(--grad1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  display:block; margin-bottom:0.8rem;
+}
+.footer-brand p { font-size:0.84rem; color:rgba(255,255,255,0.42); line-height:1.82; max-width:260px; }
+.footer-col h4 { font-size:0.7rem; letter-spacing:0.22em; text-transform:uppercase; background:var(--grad1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:1.1rem; font-weight:600; }
+.footer-col ul { list-style:none; display:flex; flex-direction:column; gap:0.65rem; }
+.footer-col a { font-size:0.84rem; color:rgba(255,255,255,0.45); text-decoration:none; transition:color 0.3s; }
+.footer-col a:hover { color:var(--magenta); }
+.footer-socials { display:flex; gap:0.7rem; flex-wrap:wrap; }
+.social-btn { width:40px; height:40px; border-radius:10px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; font-size:1rem; text-decoration:none; transition:background 0.3s, border-color 0.3s, transform 0.3s; }
+.social-btn:hover { background:rgba(155,39,175,0.2); border-color:rgba(155,39,175,0.45); transform:translateY(-3px); }
+.footer-bottom { border-top:1px solid rgba(255,255,255,0.07); padding-top:1.8rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+.footer-copy { font-size:0.79rem; color:rgba(255,255,255,0.32); }
+
+/* ════ FLOATING BUTTONS ════ */
+#wa-btn { position:fixed; bottom:1.8rem; right:1.8rem; width:56px; height:56px; border-radius:50%; background:#25D366; display:flex; align-items:center; justify-content:center; font-size:1.5rem; z-index:500; box-shadow:0 7px 28px rgba(37,211,102,0.4); text-decoration:none; animation:waPulse 2.6s ease-in-out infinite; transition:transform 0.3s; }
+#wa-btn:hover { transform:scale(1.1); animation-play-state:paused; }
+@keyframes waPulse { 0%,100%{box-shadow:0 7px 28px rgba(37,211,102,0.38)} 50%{box-shadow:0 7px 48px rgba(37,211,102,0.65),0 0 0 10px rgba(37,211,102,0.1)} }
+#top-btn { position:fixed; bottom:6.2rem; right:1.9rem; width:42px; height:42px; border-radius:11px; background:var(--grad-violet); border:none; display:flex; align-items:center; justify-content:center; font-size:1rem; z-index:500; cursor:pointer; box-shadow:0 6px 22px rgba(155,39,175,0.4); color:white; opacity:0; transform:translateY(8px); transition:opacity 0.4s, transform 0.4s; }
+#top-btn.show { opacity:1; transform:none; }
+
+/* ════ LIGHTBOX ════ */
+#lightbox { position:fixed; inset:0; z-index:5000; background:rgba(0,0,0,0.88); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.35s; }
+#lightbox.active { opacity:1; pointer-events:all; }
+#lb-img { max-width:82vw; max-height:82vh; border-radius:16px; background:var(--softgray); display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:260px; min-height:260px; font-size:0.82rem; color:rgba(90,30,120,0.45); letter-spacing:0.1em; transform:scale(0.82); transition:transform 0.4s var(--ease); overflow:hidden; }
+#lb-img img { max-width:100%; max-height:100%; object-fit:contain; display:block; }
+#lightbox.active #lb-img { transform:scale(1); }
+#lb-close { position:absolute; top:1.5rem; right:1.5rem; width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:white; font-size:1.1rem; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background 0.3s; }
+#lb-close:hover { background:rgba(155,39,175,0.4); }
+
+/* ════ FLOAT ANIMATION ════ */
+.float-el { animation:floatEl 4.5s ease-in-out infinite alternate; }
+@keyframes floatEl { from{transform:translateY(0)} to{transform:translateY(-12px)} }
+
+/* ════ RESPONSIVE ════ */
+@media(max-width:1024px){
+  .cat-grid { grid-template-columns:repeat(2,1fr); }
+  .why-grid { grid-template-columns:repeat(2,1fr); }
+  .footer-top { grid-template-columns:1fr 1fr; }
+  .stats-grid { grid-template-columns:repeat(2,1fr); gap:1.5rem; }
+}
+@media(max-width:768px){
+  .nav-links { display:none; }
+  .nav-toggle { display:flex; }
+  .nav-logo-img { width:46px; height:46px; font-size:1.5rem; }
+  .nav-logo-text { font-size:1.2rem; }
+  #hero { grid-template-columns:1fr; padding:6.5rem 5vw 3.5rem; gap:2.5rem; }
+  .hero-title { font-size:clamp(2.2rem,8vw,3.2rem); }
+  .hero-para { max-width:100%; }
+  .hero-img-wrap { max-width:100%; aspect-ratio:16/9; border-radius:18px; }
+  .hero-cards { flex-direction:row; flex-wrap:wrap; }
+  .hero-card { flex:1; min-width:130px; }
+  .about-grid { grid-template-columns:1fr; gap:2.5rem; }
+  .about-img-wrap { aspect-ratio:16/9; max-height:300px; }
+  .about-stats { gap:1.5rem; }
+  .process-row { flex-direction:column; align-items:center; gap:2.5rem; }
+  .process-row::before { display:none; }
+  .process-step { flex:none; width:100%; max-width:340px; }
+  .contact-grid { grid-template-columns:1fr; gap:3rem; }
+  .footer-top { grid-template-columns:1fr 1fr; gap:2rem; }
+  .stats-grid { grid-template-columns:repeat(2,1fr); }
+  .why-grid { grid-template-columns:1fr 1fr; }
+  .ba-wrap { aspect-ratio:4/3; }
+  .section-pad { padding:4.5rem 5vw; }
+}
+@media(max-width:500px){
+  .cat-grid { grid-template-columns:1fr; }
+  .why-grid { grid-template-columns:1fr; }
+  .hero-btns { flex-direction:column; }
+  .hero-btns a { text-align:center; }
+  .hero-cards { flex-direction:column; }
+  .hero-card { min-width:0; }
+  .footer-top { grid-template-columns:1fr; }
+  .stats-grid { grid-template-columns:1fr 1fr; gap:1rem; }
+  .section-pad { padding:3.5rem 5vw; }
+  .section-title { font-size:clamp(1.7rem,7vw,2.2rem); }
+  #wa-btn { width:50px; height:50px; font-size:1.3rem; bottom:1.4rem; right:1.4rem; }
+  #top-btn { bottom:5.4rem; right:1.5rem; }
+  .nav-logo-img { width:42px; height:42px; font-size:1.4rem; }
+  .nav-logo-text { font-size:1.1rem; }
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after { animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- Stars canvas -->
+<canvas id="stars-canvas" aria-hidden="true"></canvas>
+
+<!-- Loader -->
+<div id="loader" role="status" aria-label="Loading">
+  <div id="loader-logo-wrap">
+    <div id="loader-logo-img">🎁</div>
+    <div id="loader-name">Craft with Bhoomi</div>
+    <div id="loader-tag">Handmade with Love</div>
+  </div>
+  <div id="loader-bar-wrap"><div id="loader-bar"></div></div>
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Image preview">
+  <div id="lb-img"><span style="font-size:2rem;opacity:.3">🖼️</span><span style="margin-top:.5rem">Image Preview</span></div>
+  <button id="lb-close" aria-label="Close">✕</button>
+</div>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mob-menu" role="dialog" aria-modal="true">
+  <button class="mob-close" id="mob-close" aria-label="Close menu">✕</button>
+  <a href="#hero"       onclick="closeMob()">Home</a>
+  <a href="#about"      onclick="closeMob()">About</a>
+  <a href="#categories" onclick="closeMob()">Products</a>
+  <a href="#reviews"    onclick="closeMob()">Reviews</a>
+  <a href="#contact"    onclick="closeMob()">Contact</a>
+</div>
+
+<!-- Navbar -->
+<nav id="navbar" role="navigation" aria-label="Main navigation">
+  <a href="#hero" class="nav-brand" aria-label="Craft with Bhoomi — Home">
+    <!-- LOGO SLOT: replace emoji with <img src="logo.png" alt="Craft with Bhoomi logo"> -->
+    <div class="nav-logo-img" aria-hidden="true">🎁</div>
+    <div class="nav-logo-text">
+      Craft with Bhoomi
+      <span class="nav-logo-sub">Handmade Gifts</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#hero" class="active">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#categories">Products</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section id="hero" role="banner">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-content">
+    <span class="hero-eyebrow">Handcrafted with Heart ✨</span>
+    <h1 class="hero-title">Handmade<br><span class="grad-word">Memories,</span><br>Crafted With Love.</h1>
+    <p class="hero-para">Personalized handcrafted gifts that turn your memories into timeless keepsakes — made just for you, with care in every single detail.</p>
+    <div class="hero-btns">
+      <a href="#categories" class="btn-primary">Explore Collection</a>
+      <a href="#contact" class="btn-outline">Contact Us</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-img-wrap float-el">
+      <!-- HERO IMAGE SLOT: replace with <img src="hero.jpg" alt="Craft with Bhoomi handmade gifts"> -->
+      <div class="hero-img-inner">
+        <span style="font-size:3rem;opacity:.35">🎁</span>
+        <span>Hero Image</span>
+      </div>
+    </div>
+    <div class="hero-cards">
+      <div class="hero-card">⭐ <span>500+ Happy Customers</span></div>
+      <div class="hero-card">🎁 <span>Handmade with Love</span></div>
+      <div class="hero-card">🚚 <span>PAN India Delivery</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ABOUT ══ -->
+<section id="about" class="section-pad">
+  <div class="about-grid">
+    <div class="about-img-wrap reveal-l">
+      <!-- ABOUT IMAGE SLOT: replace with <img src="bhoomi.jpg" alt="Bhoomi Ahuja"> -->
+      <span style="font-size:3.5rem;opacity:.4">👩‍🎨</span>
+      <span style="font-size:.75rem;letter-spacing:.14em">Bhoomi's Photo</span>
+    </div>
+    <div class="about-text reveal-r">
+      <span class="eyebrow" style="background:var(--grad-rose);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Our Story</span>
+      <h2 class="section-title">Meet Bhoomi Ahuja</h2>
+      <p>Every craft begins not with material, but with meaning. I'm <strong class="cherry">Bhoomi Ahuja</strong> — a maker, a dreamer, and someone who truly believes the most precious gifts are the ones you can't find in any store.</p>
+      <p>What started as a <strong class="violet">quiet passion for art</strong> in a small studio has grown into something beautifully purposeful: creating keepsakes that families treasure for decades. Each piece carries the giver's heart and the receiver's story.</p>
+      <p>I don't make products. I make <strong class="teal">memories you can hold</strong> — woven from photographs, names, moments, and love.</p>
+      <div class="about-stats">
+        <div class="stat-box"><div class="stat-box-num">500+</div><div class="stat-box-label">Happy Families</div></div>
+        <div class="stat-box"><div class="stat-box-num" style="background:var(--grad-violet);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">3+</div><div class="stat-box-label">Years of Craft</div></div>
+        <div class="stat-box"><div class="stat-box-num" style="background:var(--grad-ocean);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">98%</div><div class="stat-box-label">Satisfaction Rate</div></div>
+      </div>
+      <a href="#contact" class="btn-primary" style="margin-top:.5rem">Know More</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CATEGORIES ══ -->
+<section id="categories" class="section-pad">
+  <div class="section-center reveal">
+    <span class="eyebrow" style="background:var(--grad-cherry);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Our Collection 🎨</span>
+    <h2 class="section-title">Crafted for Every Occasion</h2>
+    <p class="section-sub">From weddings to corporate gifting — each category is a world of thoughtful, handmade possibilities.</p>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-card reveal" style="transition-delay:.04s">
+      <div class="cat-thumb ct1">🖼️<div class="cat-overlay ov1"></div></div>
+      <div class="cat-body"><h3 class="cat-title">Photo Stands</h3><p class="cat-desc">Custom acrylic & wooden stands that bring your favorite moments to life.</p></div>
+    </div>
+    <div class="cat-card reveal" style="transition-delay:.08s">
+      <div class="cat-thumb ct2">🪵<div class="cat-overlay ov2"></div></div>
+      <div class="cat-body"><h3 class="cat-title">Wooden Frames</h3><p class="cat-desc">Hand-finished frames with personalized engravings you'll cherish forever.</p></div>
+    </div>
+    <div class="cat-card reveal" style="transition-delay:.12s">
+      <div class="cat-thumb ct3">✍️<div class="cat-overlay ov3"></div></div>
+      <div class="cat-body"><h3 class="cat-title">Name Plaques</h3><p class="cat-desc">Elegant door plaques crafted from premium wood and resin.</p></div>
+    </div>
+    <div class="cat-card reveal" style="transition-delay:.16s">
+      <div class="cat-thumb ct4">🔑<div class="cat-overlay ov4"></div></div>
+      <div class="cat-body"><h3 class="cat-title">Keychains</h3><p class="cat-desc">Personalized keychains in acrylic, wood, and resin — tiny treasures.</p></div>
+    </div>
+    <div class="cat-card reveal" style="transition-delay:.20s">
+      <div class="cat-thumb ct5">🧲<div class="cat-overlay ov5"></div></div>
+      <div class="cat-body"><h3 class="cat-title">Fridge Magnets</h3><p class="cat-desc">Custom magnets that keep your sweetest memories in sight every day.</p></div>
+    </div>
+    <div class="cat-card reveal" style="transition-delay:.24s">
+      <div class="cat-thumb ct6">💍<div class="cat-overlay ov6"></div></div>
+      <div class="cat-body"><h3 class="cat-title">Wedding Gifts</h3><p class="cat-desc">Luxurious pieces that celebrate love and become family heirlooms.</p></div>
+    </div>
+    <div class="cat-card reveal" style="transition-delay:.28s">
+      <div class="cat-thumb ct7">🏢<div class="cat-overlay ov7"></div></div>
+      <div class="cat-body"><h3 class="cat-title">Corporate Gifts</h3><p class="cat-desc">Premium branded keepsakes that make your team feel truly valued.</p></div>
+    </div>
+    <div class="cat-card reveal" style="transition-delay:.32s">
+      <div class="cat-thumb ct8">🎨<div class="cat-overlay ov8"></div></div>
+      <div class="cat-body"><h3 class="cat-title">Custom Orders</h3><p class="cat-desc">Have a unique idea? Let's bring it to life — no vision is too personal.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WHY CHOOSE US ══ -->
+<section id="why" class="section-pad">
+  <div class="section-center why-intro reveal">
+    <span class="eyebrow" style="background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Why Craft with Bhoomi 💛</span>
+    <h2 class="section-title" style="color:white">Crafted with Intention,<br>Delivered with Care</h2>
+    <p class="section-sub">Every detail matters. Here's what makes every piece truly special.</p>
+  </div>
+  <div class="why-grid">
+    <div class="why-card reveal" style="transition-delay:.04s"><div class="why-icon wi1">🤲</div><h3>100% Handmade</h3><p>No factories, no machines — just skill, patience, and genuine love for the craft.</p></div>
+    <div class="why-card reveal" style="transition-delay:.10s"><div class="why-icon wi2">✨</div><h3>Premium Quality</h3><p>Select-grade wood, food-safe resins, archival inks — materials chosen to last a lifetime.</p></div>
+    <div class="why-card reveal" style="transition-delay:.16s"><div class="why-icon wi3">🎨</div><h3>Personalized Designs</h3><p>No two pieces are identical. Every order is tailored to your exact vision and message.</p></div>
+    <div class="why-card reveal" style="transition-delay:.22s"><div class="why-icon wi4">💛</div><h3>Made with Love</h3><p>Bhoomi pours genuine emotion into every order. You'll feel the warmth when you unwrap it.</p></div>
+  </div>
+</section>
+
+<!-- ══ PROCESS ══ -->
+<section id="process" class="section-pad">
+  <div class="section-center reveal">
+    <span class="eyebrow" style="background:var(--grad-ocean);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">How It Works 🔄</span>
+    <h2 class="section-title">From Vision to Keepsake</h2>
+    <p class="section-sub">Four simple steps between your idea and a beautiful, handcrafted memory.</p>
+  </div>
+  <div class="process-row">
+    <div class="process-step reveal" style="transition-delay:.0s">
+      <div class="process-node">🛍️<span class="process-num pn1">1</span></div>
+      <h3>Choose Product</h3><p>Browse our collection and pick the perfect keepsake for your occasion.</p>
+    </div>
+    <div class="process-step reveal" style="transition-delay:.12s">
+      <div class="process-node">📸<span class="process-num pn2">2</span></div>
+      <h3>Share Your Photo</h3><p>Send your photo, name, or message via WhatsApp or email.</p>
+    </div>
+    <div class="process-step reveal" style="transition-delay:.24s">
+      <div class="process-node">🎨<span class="process-num pn3">3</span></div>
+      <h3>We Craft It</h3><p>Bhoomi personally handcrafts your piece with care and heart.</p>
+    </div>
+    <div class="process-step reveal" style="transition-delay:.36s">
+      <div class="process-node">📦<span class="process-num pn4">4</span></div>
+      <h3>Delivered to You</h3><p>Carefully packed and shipped anywhere across India.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ REVIEWS ══ -->
+<section id="reviews" class="section-pad">
+  <div class="section-center reviews-intro reveal">
+    <span class="eyebrow" style="background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Customer Love 💬</span>
+    <h2 class="section-title">Words from Our Happy Families</h2>
+    <p class="section-sub">Real people, real memories, real joy.</p>
+  </div>
+  <div class="reviews-wrap">
+    <div class="reviews-track" id="reviews-track"></div>
+  </div>
+</section>
+
+<!-- ══ STATS ══ -->
+<section id="stats" class="section-pad">
+  <div class="stats-grid">
+    <div class="reveal"><div class="stat-num c1"><span class="counter" data-target="500">0</span>+</div><div class="stat-label">Orders Delivered</div></div>
+    <div class="reveal" style="transition-delay:.1s"><div class="stat-num c2"><span class="counter" data-target="300">0</span>+</div><div class="stat-label">Custom Designs</div></div>
+    <div class="reveal" style="transition-delay:.2s"><div class="stat-num c3"><span class="counter" data-target="98">0</span>%</div><div class="stat-label">Happy Customers</div></div>
+    <div class="reveal" style="transition-delay:.3s"><div class="stat-num c4">5★</div><div class="stat-label">Average Rating</div></div>
+  </div>
+</section>
+
+<!-- ══ BEFORE & AFTER ══ -->
+<section id="ba" class="section-pad">
+  <div class="section-center reveal">
+    <span class="eyebrow" style="background:var(--grad-violet);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">The Transformation ✨</span>
+    <h2 class="section-title">Your Photo → A Keepsake</h2>
+    <p class="section-sub">Drag the slider to see how a simple photo becomes something extraordinary.</p>
+  </div>
+  <div class="ba-wrap" id="ba-wrap">
+    <div class="ba-before">
+      <!-- BEFORE IMAGE: add <img src="before.jpg" alt="Customer photo"> -->
+      <span style="font-size:2.5rem;opacity:.4">📷</span><span>Your Photo</span>
+    </div>
+    <div class="ba-after" id="ba-after">
+      <!-- AFTER IMAGE: add <img src="after.jpg" alt="Finished keepsake"> -->
+      <span style="font-size:2.5rem;opacity:.4">✨</span><span>The Keepsake</span>
+    </div>
+    <div class="ba-divider" id="ba-divider"><div class="ba-handle">⇔</div></div>
+    <span class="ba-lbl ba-lbl-b">Before</span>
+    <span class="ba-lbl ba-lbl-a">After</span>
+  </div>
+</section>
+
+<!-- ══ FAQ ══ -->
+<section id="faq" class="section-pad">
+  <div class="faq-wrap">
+    <div class="reveal" style="margin-bottom:2.5rem">
+      <span class="eyebrow" style="background:var(--grad-cherry);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">FAQs ❓</span>
+      <h2 class="section-title">Got Questions?</h2>
+      <p class="section-sub">Here are answers to the things people wonder most.</p>
+    </div>
+    <div id="faq-list"></div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
+<section id="contact" class="section-pad">
+  <div class="contact-grid">
+    <div class="reveal-l">
+      <span class="eyebrow" style="background:var(--grad-rose);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Get in Touch 💌</span>
+      <h2 class="contact-title">Let's Create Something<br>Beautiful Together</h2>
+      <div class="form-group"><label for="f-name">Your Name</label><input type="text" id="f-name" placeholder="Priya Sharma" autocomplete="name"></div>
+      <div class="form-group"><label for="f-email">Email Address</label><input type="email" id="f-email" placeholder="priya@email.com" autocomplete="email"></div>
+      <div class="form-group"><label for="f-phone">Phone / WhatsApp</label><input type="tel" id="f-phone" placeholder="+91 98765 43210" autocomplete="tel"></div>
+      <div class="form-group"><label for="f-msg">Your Message</label><textarea id="f-msg" placeholder="Tell me about the gift you have in mind..."></textarea></div>
+      <button class="btn-primary" onclick="handleForm()">Send Message 💛</button>
+    </div>
+    <div class="contact-right reveal-r">
+      <div>
+        <p class="contact-right-title">We'd love to hear from you</p>
+        <p class="contact-right-sub" style="margin-top:.6rem">Whether you have a specific idea or just want to explore — reach out on any channel and Bhoomi will get back to you personally.</p>
+      </div>
+      <div class="contact-details">
+        <div class="contact-detail"><div class="contact-icon ci1">📧</div><div><div class="cdl">Email</div><div class="cdv">hello@craftwithbhoomi.com</div></div></div>
+        <div class="contact-detail"><div class="contact-icon ci2">📱</div><div><div class="cdl">Phone / WhatsApp</div><div class="cdv">+91 98765 43210</div></div></div>
+        <div class="contact-detail"><div class="contact-icon ci3">📸</div><div><div class="cdl">Instagram</div><div class="cdv">@craftwithbhoomi</div></div></div>
+        <div class="contact-detail"><div class="contact-icon ci4">📘</div><div><div class="cdl">Facebook</div><div class="cdv">Craft with Bhoomi</div></div></div>
+      </div>
+      <a href="https://wa.me/919876543210" class="btn-primary" target="_blank" rel="noopener" style="align-self:flex-start">💬 Chat on WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <!-- FOOTER LOGO SLOT -->
+      <span class="footer-brand-name">Craft with Bhoomi</span>
+      <p>Handmade memories crafted with love. Every piece is a keepsake, every gift is a story waiting to be told.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#about">About Bhoomi</a></li>
+        <li><a href="#categories">Products</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Products</h4>
+      <ul>
+        <li><a href="#categories">Photo Stands</a></li>
+        <li><a href="#categories">Wooden Frames</a></li>
+        <li><a href="#categories">Name Plaques</a></li>
+        <li><a href="#categories">Keychains</a></li>
+        <li><a href="#categories">Custom Orders</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <div class="footer-socials" style="margin-bottom:1.2rem">
+        <a class="social-btn" href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram">📸</a>
+        <a class="social-btn" href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">📘</a>
+        <a class="social-btn" href="https://wa.me/919876543210" target="_blank" rel="noopener" aria-label="WhatsApp">💬</a>
+        <a class="social-btn" href="mailto:hello@craftwithbhoomi.com" aria-label="Email">📧</a>
+      </div>
+      <p style="font-size:.8rem;color:rgba(255,255,255,.38);line-height:1.75">PAN India Delivery<br>Bulk & Corporate Orders Welcome</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Craft with Bhoomi. All rights reserved.</span>
+    <span class="footer-copy">Made with ❤️ by hand, in India</span>
+  </div>
+</footer>
+
+<a id="wa-btn" href="https://wa.me/919876543210" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">💬</a>
+<button id="top-btn" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ── LOADER ──
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const l = document.getElementById('loader');
+    l.style.transition = 'opacity .7s, transform .7s';
+    l.style.opacity = '0'; l.style.transform = 'scale(1.04)';
+    setTimeout(() => l.style.display = 'none', 700);
+  }, 2200);
+});
+
+// ── FLOATING STARS CANVAS ──
+(function() {
+  const canvas = document.getElementById('stars-canvas');
+  const ctx = canvas.getContext('2d');
+  const colors = ['#D0002E','#F26522','#F9D423','#2ECC71','#0EA5E9','#3B5EE8','#9B27AF','#E91E8C','#1ABC9C','#F5A623'];
+  let stars = [];
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  class Star {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height + canvas.height;
+      this.size = Math.random() * 10 + 6;
+      this.speedY = -(Math.random() * 0.6 + 0.3);
+      this.speedX = (Math.random() - 0.5) * 0.4;
+      this.rotation = Math.random() * Math.PI * 2;
+      this.rotSpeed = (Math.random() - 0.5) * 0.03;
+      this.color = colors[Math.floor(Math.random() * colors.length)];
+      this.alpha = 0;
+      this.fadeIn = true;
+      this.maxAlpha = Math.random() * 0.5 + 0.25;
+      this.twinkleSpeed = Math.random() * 0.02 + 0.01;
+      this.twinkleOffset = Math.random() * Math.PI * 2;
+      this.life = 0;
+      this.maxLife = Math.random() * 400 + 200;
+    }
+    drawStar(cx, cy, r, color, alpha) {
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = color;
+      ctx.shadowColor = color;
+      ctx.shadowBlur = r * 2;
+      ctx.translate(cx, cy);
+      ctx.rotate(this.rotation);
+      ctx.beginPath();
+      for (let i = 0; i < 5; i++) {
+        const outerAngle = (i * 4 * Math.PI / 5) - Math.PI / 2;
+        const innerAngle = outerAngle + (2 * Math.PI / 10);
+        if (i === 0) ctx.moveTo(Math.cos(outerAngle) * r, Math.sin(outerAngle) * r);
+        else ctx.lineTo(Math.cos(outerAngle) * r, Math.sin(outerAngle) * r);
+        ctx.lineTo(Math.cos(innerAngle) * r * 0.42, Math.sin(innerAngle) * r * 0.42);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      this.rotation += this.rotSpeed;
+      this.life++;
+      const twinkle = Math.sin(this.life * this.twinkleSpeed + this.twinkleOffset) * 0.15 + 0.85;
+      if (this.fadeIn) {
+        this.alpha = Math.min(this.alpha + 0.012, this.maxAlpha);
+        if (this.alpha >= this.maxAlpha) this.fadeIn = false;
+      }
+      if (this.life > this.maxLife - 60) this.alpha = Math.max(this.alpha - 0.01, 0);
+      this.drawStar(this.x, this.y, this.size, this.color, this.alpha * twinkle);
+      if (this.life >= this.maxLife || this.y < -50) this.reset();
+    }
+  }
+
+  for (let i = 0; i < 22; i++) {
+    const s = new Star();
+    s.y = Math.random() * canvas.height; // spread initially
+    s.life = Math.floor(Math.random() * s.maxLife);
+    stars.push(s);
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => s.update());
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+// ── MOBILE MENU ──
+const toggle = document.getElementById('nav-toggle');
+const mobMenu = document.getElementById('mob-menu');
+const mobClose = document.getElementById('mob-close');
+function openMob() { mobMenu.style.display='flex'; requestAnimationFrame(()=>mobMenu.classList.add('open')); toggle.classList.add('open'); toggle.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+function closeMob() { mobMenu.classList.remove('open'); toggle.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); document.body.style.overflow=''; setTimeout(()=>{ mobMenu.style.display=''; },300); }
+toggle.addEventListener('click', () => toggle.classList.contains('open') ? closeMob() : openMob());
+mobClose.addEventListener('click', closeMob);
+
+// ── NAVBAR SCROLL ──
+const navbar = document.getElementById('navbar');
+const navAs = document.querySelectorAll('.nav-links a');
+const secs = [...document.querySelectorAll('section[id]')];
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  navbar.classList.toggle('scrolled', y > 50);
+  document.getElementById('top-btn').classList.toggle('show', y > 400);
+  let cur = '';
+  secs.forEach(s => { if (y >= s.offsetTop - 130) cur = s.id; });
+  navAs.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+}, { passive:true });
+
+// ── REVEAL ──
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const d = parseFloat(e.target.style.transitionDelay||0)*1000;
+      setTimeout(() => e.target.classList.add('visible'), d);
+      ro.unobserve(e.target);
+    }
+  });
+}, { threshold:0.1, rootMargin:'0px 0px -50px 0px' });
+document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el => ro.observe(el));
+
+// ── COUNTER ──
+const co = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const el = e.target, target = +el.dataset.target;
+      let n = 0; const step = target/55;
+      const t = setInterval(() => { n=Math.min(n+step,target); el.textContent=Math.round(n); if(n>=target) clearInterval(t); }, 18);
+      co.unobserve(el);
+    }
+  });
+}, { threshold:0.5 });
+document.querySelectorAll('.counter').forEach(c => co.observe(c));
+
+// ── REVIEWS ──
+const reviewData = [
+  { name:'Priya M.', loc:'Mumbai', av:'av1', emoji:'👩', text:"Ordered a custom photo stand for my parents' anniversary. The quality and packaging left me speechless. They cried happy tears!" },
+  { name:'Rahul S.', loc:'Delhi',  av:'av2', emoji:'👨', text:"Got keychains for the whole wedding squad. Every single person asked where they came from. Delivered on time, beautifully done!" },
+  { name:'Ananya K.', loc:'Bangalore', av:'av3', emoji:'👩‍🦱', text:"The wooden name plaque for our nursery is the most beautiful thing in the room. Personal, premium, and made with actual love." },
+  { name:'Dev T.',   loc:'Pune',  av:'av4', emoji:'👨‍💼', text:"We ordered 50 corporate gifts and every single one was perfect. The attention to detail is unreal. Our whole team loved them!" },
+  { name:'Sneha R.', loc:'Chennai', av:'av5', emoji:'👩‍🦰', text:"The fridge magnets from our trip photos are so precious. Such a creative idea, executed perfectly. Will reorder always!" },
+  { name:'Amit J.',  loc:'Jaipur', av:'av6', emoji:'🧔', text:"Bhoomi put our wedding photo into the most stunning wooden frame. It now sits at the center of our home — a true heirloom." },
+  { name:'Riya P.',  loc:'Kolkata', av:'av7', emoji:'👩', text:"Gifted a custom keychain to my best friend and she literally started crying. This is what a thoughtful gift feels like. Thank you!" },
+  { name:'Vikram N.',loc:'Hyderabad', av:'av8', emoji:'🧑', text:"Ordered home decor pieces for our new house. The craftsmanship is extraordinary — each piece has personality and warmth." },
+];
+const track = document.getElementById('reviews-track');
+[...reviewData,...reviewData].forEach(r => {
+  const c = document.createElement('div'); c.className='review-card';
+  c.innerHTML=`<div class="review-stars">★★★★★</div><p class="review-text">"${r.text}"</p><div class="review-author"><div class="review-avatar ${r.av}">${r.emoji}</div><div><div class="review-name">${r.name}</div><div class="review-loc">${r.loc}</div></div></div>`;
+  track.appendChild(c);
+});
+
+// ── FAQ ──
+const faqs=[
+  {q:'Can I customize every product?',a:"Absolutely! Every product can be fully personalized with your name, photo, message, or date. If you have a unique idea, just reach out and we'll make it happen."},
+  {q:'How long does delivery take?',a:"Standard delivery takes 5–8 business days after your design is confirmed. Express options are available for urgent orders. We'll keep you updated throughout."},
+  {q:'Do you ship across India?',a:"Yes! We deliver to every corner of India via trusted courier partners. Packaging is premium and protective to ensure your keepsake arrives perfectly."},
+  {q:'Can I order in bulk for weddings or corporate events?',a:"Of course! Whether it's 10 wedding favors or 500 corporate gifts, we offer special pricing and dedicated coordination for large orders."},
+  {q:'What materials do you use?',a:"We use select-grade natural wood, food-safe resins, premium acrylic, and archival inks chosen for longevity and beauty."},
+  {q:'How do I share my photo or design details?',a:"After contacting us, share your photos and instructions via WhatsApp or email. We'll guide you through exactly what we need."},
+];
+const faqList=document.getElementById('faq-list');
+faqs.forEach((f,i)=>{
+  const item=document.createElement('div'); item.className='faq-item reveal'; item.style.transitionDelay=`${i*.07}s`;
+  item.innerHTML=`<div class="faq-q" role="button" tabindex="0" aria-expanded="false"><span>${f.q}</span><span class="faq-icon">+</span></div><div class="faq-a">${f.a}</div>`;
+  const q=item.querySelector('.faq-q');
+  const tog=()=>{ const open=item.classList.contains('open'); faqList.querySelectorAll('.faq-item').forEach(el=>{el.classList.remove('open');el.querySelector('.faq-q').setAttribute('aria-expanded','false');}); if(!open){item.classList.add('open');q.setAttribute('aria-expanded','true');} };
+  q.addEventListener('click',tog); q.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')tog();});
+  faqList.appendChild(item);
+});
+faqList.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+// ── BEFORE & AFTER ──
+const baWrap=document.getElementById('ba-wrap');
+const baDivider=document.getElementById('ba-divider');
+const baAfter=document.getElementById('ba-after');
+let dragging=false;
+function setBA(pct){pct=Math.max(5,Math.min(95,pct));baAfter.style.clipPath=`inset(0 ${100-pct}% 0 0)`;baDivider.style.left=pct+'%';}
+setBA(50);
+baWrap.addEventListener('mousedown',()=>dragging=true);
+document.addEventListener('mouseup',()=>dragging=false);
+document.addEventListener('mousemove',e=>{if(!dragging)return;const r=baWrap.getBoundingClientRect();setBA(((e.clientX-r.left)/r.width)*100);});
+baWrap.addEventListener('touchstart',e=>{const r=baWrap.getBoundingClientRect();setBA(((e.touches[0].clientX-r.left)/r.width)*100);},{passive:true});
+baWrap.addEventListener('touchmove',e=>{const r=baWrap.getBoundingClientRect();setBA(((e.touches[0].clientX-r.left)/r.width)*100);e.preventDefault();},{passive:false});
+
+// ── LIGHTBOX ──
+document.getElementById('lb-close').addEventListener('click',()=>document.getElementById('lightbox').classList.remove('active'));
+document.getElementById('lightbox').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('active');});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('lightbox').classList.remove('active');});
+
+// ── SMOOTH SCROLL ──
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}});
+});
+
+// ── RIPPLE ──
+const rs=document.createElement('style'); rs.textContent='@keyframes rippleA{to{transform:scale(28);opacity:0;}}'; document.head.appendChild(rs);
+document.querySelectorAll('.btn-primary').forEach(btn=>{
+  btn.addEventListener('click',function(e){
+    const s=document.createElement('span'),r=this.getBoundingClientRect();
+    s.style.cssText=`position:absolute;border-radius:50%;background:rgba(255,255,255,.3);width:10px;height:10px;left:${e.clientX-r.left-5}px;top:${e.clientY-r.top-5}px;animation:rippleA .6s ease-out forwards;pointer-events:none;`;
+    this.style.position='relative'; this.appendChild(s); setTimeout(()=>s.remove(),600);
+  });
+});
+
+// ── FORM ──
+function handleForm(){
+  const n=document.getElementById('f-name').value.trim();
+  if(!n){alert('Please enter your name.');return;}
+  alert('Thank you, '+n+'! Bhoomi will be in touch soon. \uD83D\uDC9B');
+}
+
+// ── HERO PARALLAX ──
+window.addEventListener('scroll',()=>{
+  const w=document.querySelector('.hero-img-wrap');
+  if(w&&window.scrollY<window.innerHeight) w.style.transform='translateY('+(window.scrollY*0.1)+'px)';
+},{passive:true});
+</script>
+</body>
+</html>
